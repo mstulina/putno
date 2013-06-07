@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:gauge="http://schemas.android.com/apk/res/com.example.putno"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="top"
+    tools:context=".Main" >
+    
+
+       
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/toggleButton"
+        android:layout_below="@+id/toggleButton"
+        android:text="Button" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="29dp"
+        android:checked="false"
+        android:text="ToggleButton" />
+
+     <com.example.putno.gauge.GaugeView
+         android:id="@+id/gauge_view1"
+         android:layout_width="100dp"
+         android:layout_height="100dp"
+         android:layout_below="@+id/button1"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="20dp"
+         gauge:showNeedle="true"
+         gauge:showOuterRim="false"
+         gauge:showOuterShadow="true"
+         gauge:showRanges="false"
+         gauge:showText="true"
+         gauge:textUnit="%" />
+     
+     <com.example.putno.gauge.GaugeView
+         android:id="@+id/gauge_view2"
+         android:layout_width="100dp"
+         android:layout_height="100dp"
+         android:layout_below="@+id/gauge_view1"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="20dp"
+         gauge:showNeedle="true"
+         gauge:showOuterRim="false"
+         gauge:showOuterShadow="true"
+         gauge:showRanges="false"
+         gauge:showText="true"
+         gauge:textUnit="°C" />
+
+</RelativeLayout>
