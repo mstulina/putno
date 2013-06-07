@@ -1,0 +1,4 @@
+putno
+=====
+
+putno racunalo simulacija
