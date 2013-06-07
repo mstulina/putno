@@ -38,7 +38,6 @@ public class Main extends Activity {
 	
 	Timer timer = null;
 
-	Timer timer2 = null;
 	
 	private GaugeView mGaugeView1 = null;
 	private GaugeView mGaugeView2 = null;
@@ -57,13 +56,6 @@ public class Main extends Activity {
       initList();
       
       init();
-
-		//mGaugeView2 = (GaugeView) findViewById(R.id.gauge_view2);
-//		mTimer.start();
-      
-
-      
-      
 	}
 	
 	
@@ -116,9 +108,7 @@ private void init() {
 						// TODO Auto-generated catch block
 						Log.e("SOCKET", "IOException----ERRROR----socket.close()"+e.toString());
 					}
-		        	
 	        	}
-	        	
 	        }
 		}
 	   });
@@ -133,26 +123,6 @@ private void init() {
 				try {
 					flc = new FuelLevelCommand(socket.getOutputStream(), socket.getInputStream(), lock);
 					ewt = new EngineWaterTemperature(socket.getOutputStream(), socket.getInputStream(), lock);
-					cmdList.addFirst(ewt);
-					cmdList.addFirst(flc);
-					
-					if (timer2==null){
-			            timer2 = new Timer();
-			            timer2.schedule( new TimerTask() {
-
-			                @Override
-			                public void run() {
-			                	runOnUiThread(new Runnable() {
-									
-									@Override
-									public void run() {
-										// TODO Auto-generated method stub
-										
-									}
-								});
-			                }
-			                }, 0,200);
-			        }
 					
 					if (timer==null){
 			            timer = new Timer();

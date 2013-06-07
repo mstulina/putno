@@ -28,18 +28,18 @@ public abstract class Command {
 		this.os = _os;
 		this.is = _is;
 		this.lock = _lock;
-//		task =  new TimerTask() {
-//
-//            @Override
-//            public void run() {
-//            	execute();
-//            }
-//        };
-//		
-//		if (timer==null){
-//            timer = new Timer();
-//            timer.schedule(task, 0,200);
-//		}
+		task =  new TimerTask() {
+
+            @Override
+            public void run() {
+            	execute();
+            }
+        };
+		
+		if (timer==null){
+            timer = new Timer();
+            timer.schedule(task, 0,200);
+		}
 		
 	}
 	
