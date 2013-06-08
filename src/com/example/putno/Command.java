@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.util.Log;
 
@@ -20,10 +20,10 @@ public abstract class Command {
 	InputStream is = null;
 	Timer timer = null;
 	TimerTask task = null;
-	private ReadWriteLock lock = new ReentrantReadWriteLock();
+	private Lock lock = new ReentrantLock();
 
 	
-	Command(byte [] _cmd, OutputStream _os, InputStream _is, ReadWriteLock _lock){
+	Command(byte [] _cmd, OutputStream _os, InputStream _is, Lock _lock){
 		this.cmd = _cmd;
 		this.os = _os;
 		this.is = _is;
@@ -33,6 +33,7 @@ public abstract class Command {
             @Override
             public void run() {
             	execute();
+            	Log.d(TEST_TAG, "Task swiched!");
             }
         };
 		
@@ -49,56 +50,60 @@ public abstract class Command {
 			return false;
 		}
 		else{
-
-	        lock.writeLock().lock();
-			try{ 
-				send();
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}finally{
-				lock.writeLock().unlock();
+			if (lock.tryLock()) {
+				try {
+					send();
+//					try{ 
+//						Thread.sleep(200);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+					receive();
+				} finally {
+			        lock.unlock();
+			        Log.d(TEST_TAG, "Unlocked");
+				}
+				
+				return true;
+			}else{
+				Log.e(ERROR_TAG, "Lock is locked");
+				return false;
 			}
-
-			lock.readLock().lock();
-			try{
-				receive();
-			}finally{
-				lock.readLock().unlock();
-			}
-			return true;
+			
 		}
 		
 	}
 	
 	private void send () { 
-
-		try {
-			os.write(cmd);
-			os.flush();
-			Log.d(TEST_TAG, "Command sent!");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.e(ERROR_TAG, "IOException: "+e.toString());
-			stop();
+		synchronized (os) {
+			try {
+				os.write(cmd);
+				os.flush();
+				Log.d(TEST_TAG, "Command sent!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.e(ERROR_TAG, "IOException: "+e.toString());
+				stop();
+			}
 		}
-		
 	}
 	
 	private void receive () { 
-		try {
-			is.read(request);
-			if (request[1] == cmd[1]){
-				currValue= interpret();
-				Log.d(TEST_TAG, "Data received real :"+(request[2]&0xff)+" and interpreted :"+currValue+"%");
+		synchronized (is) {
+			try {
+				Log.d(TEST_TAG, "Entered into receive method!");
+				is.read(request);
+				if (request[1] == cmd[1]){
+					currValue= interpret();
+					Log.d(TEST_TAG, "Data received real :"+(request[2]&0xff)+" and interpreted :"+currValue+"%");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.e(ERROR_TAG, "IOException: "+e.toString());
+				stop();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.e(ERROR_TAG, "IOException: "+e.toString());
-			stop();
 		}
-
 	}
 	
 	public boolean getState(){

@@ -6,8 +6,8 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -24,7 +24,7 @@ public class Main extends Activity {
 
 	int size = 2;
 	byte[] pidRq = new byte[size];
-	private ReadWriteLock lock = new ReentrantReadWriteLock();
+	private Lock lock = new ReentrantLock();
 
 	LinkedList<Byte> request = null;
 	LinkedList<Command> cmdList = null;
@@ -122,7 +122,7 @@ private void init() {
 	   		if (socket != null){
 				try {
 					flc = new FuelLevelCommand(socket.getOutputStream(), socket.getInputStream(), lock);
-					ewt = new EngineWaterTemperature(socket.getOutputStream(), socket.getInputStream(), lock);
+//					ewt = new EngineWaterTemperature(socket.getOutputStream(), socket.getInputStream(), lock);
 					
 					if (timer==null){
 			            timer = new Timer();
@@ -137,7 +137,7 @@ private void init() {
 										// TODO Auto-generated method stub
 										
 					                	mGaugeView1.setTargetValue(flc.interpret());
-					                	mGaugeView2.setTargetValue(ewt.interpret());
+//					                	mGaugeView2.setTargetValue(ewt.interpret());
 									}
 								});
 			                }
@@ -165,7 +165,7 @@ private void init() {
 			// TODO Auto-generated method stub
 			
 			try {
-				socket = new Socket("10.0.2.2",5555);
+				socket = new Socket("10.0.2.2",5331);
 				//For precaution
 				Thread.sleep(100);
 //				flc = new FuelLevelCommand(socket.getOutputStream(), socket.getInputStream());
