@@ -53,14 +53,12 @@ public abstract class Command {
 	        lock.writeLock().lock();
 			try{ 
 				send();
-			}finally{
-				lock.writeLock().unlock();
-			}
-			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}finally{
+				lock.writeLock().unlock();
 			}
 
 			lock.readLock().lock();
