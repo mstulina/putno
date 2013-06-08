@@ -165,7 +165,7 @@ private void init() {
 			// TODO Auto-generated method stub
 			
 			try {
-				socket = new Socket("10.0.2.2",4567);
+				socket = new Socket("10.0.2.2",5555);
 				//For precaution
 				Thread.sleep(100);
 //				flc = new FuelLevelCommand(socket.getOutputStream(), socket.getInputStream());
@@ -204,6 +204,9 @@ private void init() {
 		
 	}
    
+   /**
+    * Here is set closing all ports and command shutdown
+    */
    
    @Override
    protected void onDestroy() {
